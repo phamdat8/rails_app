@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
   resources :products
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  resources :categories
+  resources :properties
+  get '/product_type/new/:id', to: "product_types#new"
+  post '/product_type/new/:id', to: "product_types#create"
+  get '/show_product/:id/:type', to: "products#fancy_show"
+  root to: "home#index"
 end

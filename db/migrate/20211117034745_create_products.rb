@@ -3,8 +3,6 @@ class CreateProducts < ActiveRecord::Migration[6.1]
     create_table :products do |t|
       t.string :sku
       t.string :title
-      t.integer :price
-      t.integer :quantity
 
       t.timestamps
     end

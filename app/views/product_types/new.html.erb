@@ -1,0 +1,19 @@
+<%= form_tag "/product_type/new/#{@product_id}", multipart: true do %>
+    <div class="field">
+        <%= label_tag "Quantity" %>
+        <%= number_field_tag "quantity" %>
+    </div>
+    <div class="field">
+        <%= label_tag "Image" %>
+        <%= file_field_tag "image" %>
+    </div>
+    <% @product_properties.each do |product_property|%>
+        <div class="field">
+            <%= label_tag product_property.property.name %>
+            <%= text_field_tag "properties[#{product_property.property.id}]" %>
+        </div>
+    <% end %>
+    <div class="actions">
+        <%= submit_tag "Create Product Type" %>
+    </div>
+<% end %>

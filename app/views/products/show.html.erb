@@ -1,5 +1,5 @@
 <p id="notice"><%= notice %></p>
-
+<h3>Infomation</h3>
 <p>
   <strong>Sku:</strong>
   <%= @product.sku %>
@@ -9,16 +9,23 @@
   <strong>Title:</strong>
   <%= @product.title %>
 </p>
-
-<p>
-  <strong>Price:</strong>
-  <%= @product.price %>
-</p>
-
-<p>
-  <strong>Quantity:</strong>
-  <%= @product.quantity %>
-</p>
-
 <%= link_to 'Edit', edit_product_path(@product) %> |
 <%= link_to 'Back', products_path %>
+
+<h3>Product type</h3>
+<%= link_to 'New product type ', "/product_type/new/#{@product.id}" %>
+
+<%@product.product_types.each do |product_type|%>
+  <div>
+    <h5>ID:<%= product_type.id %></h5>
+    <ul>
+    <li>Quantity:<%= product_type.quantity %></li>
+    <li><%= image_tag product_type.image, class: "product-img" if product_type.image.present?%></li>
+    <% product_type.property_values.each do |property| %>
+      <li><%=property.property.name%>:<%=property.value%></li>
+    <% end %>
+    </ul>
+  </div>
+<%end%>
+
+

@@ -1,13 +1,16 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: %i[ show edit update destroy ]
+  before_action :set_product
 
   # GET /products or /products.json
   def index
-    @products = Product.search(params[:search]).paginate(:page => params[:page], :per_page => 2)
+    
   end
 
   # GET /products/1 or /products/1.json
   def show
+  end
+
+  def fancy_show
   end
 
   # GET /products/new
@@ -21,15 +24,14 @@ class ProductsController < ApplicationController
 
   # POST /products or /products.json
   def create
+    
     @product = Product.new(product_params)
-
     respond_to do |format|
       if @product.save
+        update_product_property(params[:product][:properties], @product.id)
         format.html { redirect_to @product, notice: "Product was successfully created." }
-        format.json { render :show, status: :created, location: @product }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -39,10 +41,8 @@ class ProductsController < ApplicationController
     respond_to do |format|
       if @product.update(product_params)
         format.html { redirect_to @product, notice: "Product was successfully updated." }
-        format.json { render :show, status: :ok, location: @product }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -50,20 +50,24 @@ class ProductsController < ApplicationController
   # DELETE /products/1 or /products/1.json
   def destroy
     @product.destroy
-    respond_to do |format|
-      format.html { redirect_to products_url, notice: "Product was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    render :index
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product
-      @product = Product.find(params[:id])
+      @product = Product.find(params[:id]) if params[:id]
+      @products = Product.search(params[:search]).paginate(:page => params[:page], :per_page => 2)
     end
 
     # Only allow a list of trusted parameters through.
     def product_params
-      params.require(:product).permit(:sku, :title, :price, :quantity, :image)
+      params.require(:product).permit(:sku, :title, :category_id)
+    end
+
+    def update_product_property properties, id
+      properties.each do |property|
+        ProductProperty.create(product_id: id, property_id: property[0].to_i) if property[1] == "1"
+      end
     end
 end

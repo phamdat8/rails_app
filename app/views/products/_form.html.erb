@@ -1,15 +1,4 @@
 <%= form_with(model: product) do |form| %>
-  <% if product.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
-
-      <ul>
-        <% product.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
 
   <div class="field">
     <%= form.label :sku %>
@@ -22,19 +11,19 @@
   </div>
 
   <div class="field">
-    <%= form.label :price %>
-    <%= form.number_field :price %>
+    <%= form.label :category %>
+    <%= form.collection_select :category_id, Category.all, :id, :name %>
   </div>
 
   <div class="field">
-    <%= form.label :quantity %>
-    <%= form.number_field :quantity %>
+    <%= form.label :Property %>
+    <% Property.all.each do |property| %>
+      <%= form.check_box "properties[#{property.id}]"  %>
+      <%= property.name %>
+      <br />
+    <% end %>
   </div>
 
-  <div class="field">
-    <%= form.label :image %>
-    <%= form.file_field :image %>
-  </div>
 
   <div class="actions">
     <%= form.submit %>
